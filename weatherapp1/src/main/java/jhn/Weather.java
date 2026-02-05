@@ -12,13 +12,17 @@ import org.json.simple.parser.JSONParser;
 
 public class Weather {
 
-    public Weather(){
+    JSONArray time, temperatures;
+    int latitude, longtitude;
+    JSONObject dataObject;
+    
+    public Weather(int latitude, int longtitude){
+        this.latitude = latitude;
+        this.longtitude = longtitude;
         try {
             //Public API
             //https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&timezone=America%2FNew_York
             
-            int latitude = 45;
-            int longtitude = -75;
             URL url = new URL("https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longtitude + "&hourly=temperature_2m&timezone=America%2FNew_York");
         
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -48,19 +52,19 @@ public class Weather {
 
                 // Change 1: Parse as JSONObject, not JSONArray
                 JSONParser parse = new JSONParser();
-                JSONObject dataObject = (JSONObject) parse.parse(String.valueOf(informationString));
+                dataObject = (JSONObject) parse.parse(String.valueOf(informationString));
 
                 // Change 2: Now you can access keys directly from dataObject
-                System.out.println("Latitude: " + dataObject.get("latitude"));
+                // System.out.println("Latitude: " + dataObject.get("latitude"));
 
                 // hourly is nested so we are going to need multiple
                 JSONObject hourly = (JSONObject) dataObject.get("hourly");
-                JSONArray temperatures = (JSONArray) hourly.get("temperature_2m");
+                temperatures = (JSONArray) hourly.get("temperature_2m");
                 
-                JSONArray time = (JSONArray) hourly.get("time");
-                int index = 21;
-                System.out.println("First temperature: " + temperatures.get(index) + " Time: " + time.get(index));
-                System.out.println("done printing");
+                time = (JSONArray) hourly.get("time");
+                // int index = 10;
+                // System.out.println("Temperature: " + temperatures.get(index) + " Time: " + time.get(index));
+                // System.out.println("done printing");
                 
 
             }
@@ -72,7 +76,13 @@ public class Weather {
            
             e.printStackTrace();
         }
-    
+        
         }
-    
+
+    public String getWeatherWithTime(int slot){
+
+        return "Temp: " + temperatures.get(slot) + " Time: " + time.get(slot) + " Latitude: " + dataObject.get("latitude") + " Longtitude: " + dataObject.get("longitude");
+    }
+
+
 }
