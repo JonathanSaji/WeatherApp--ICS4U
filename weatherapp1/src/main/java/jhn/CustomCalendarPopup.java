@@ -7,35 +7,42 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
-public class CustomCalendarPopup extends JFrame {
+public class CustomCalendarPopup extends JPanel {
 
     private LocalDate selectedDate;
     private JLabel monthLabel;
     private JPanel calendarPanel;
     private YearMonth currentMonth;
     private JFrame parentFrame;
+    private JPanel parentPanel;
     private Weather weather;
 
-    public CustomCalendarPopup(JFrame parentFrame, Weather weather) {
+    private static final int WIDTH = 500;
+    private static final int HEIGHT = 500;
+
+    public CustomCalendarPopup(JFrame parentFrame, Weather weather,JPanel parentPanel) {
         this.parentFrame = parentFrame;
         this.currentMonth = YearMonth.now();
         this.weather = weather;
-
-        createAndShowDialog();
+        this.parentPanel = parentPanel;
+        
+        createAndShowPopup();
     }
 
-    private void createAndShowDialog() {
+    private void createAndShowPopup() {
 
         setLayout(new BorderLayout());
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(WIDTH, HEIGHT);
+        setBackground(Color.WHITE);
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         JPanel topPanel = new JPanel();
         JLabel prevButton = new JLabel("<");
         JLabel nextButton = new JLabel(">");
         monthLabel = new JLabel();
-
-        prevButton.setFont(new Font("Arial", Font.BOLD, 16));
-        nextButton.setFont(new Font("Arial", Font.BOLD, 16));
+        monthLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
+        prevButton.setFont(new Font("Monospaced", Font.BOLD, 20));
+        nextButton.setFont(new Font("Monospaced", Font.BOLD, 20));
         prevButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         nextButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
@@ -57,6 +64,13 @@ public class CustomCalendarPopup extends JFrame {
             }
         });
 
+        parentPanel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                closePopup();
+            }
+        });
+
         topPanel.add(prevButton);
         topPanel.add(monthLabel);
         topPanel.add(nextButton);
@@ -67,10 +81,18 @@ public class CustomCalendarPopup extends JFrame {
         add(topPanel, BorderLayout.NORTH);
         add(calendarPanel, BorderLayout.CENTER);
 
-        setPreferredSize(new Dimension(500, 500));
-        pack();
-        setLocationRelativeTo(parentFrame);
-        setVisible(true);
+        // 🔥 Add to layered pane (proper popup behavior)
+        JLayeredPane layeredPane = parentFrame.getLayeredPane();
+        layeredPane.add(this, JLayeredPane.POPUP_LAYER);
+
+        // 🔥 Center popup in frame
+        int x = (parentFrame.getWidth() - WIDTH) / 2;
+        int y = (parentFrame.getHeight() - HEIGHT) / 2;
+
+        setBounds(x, y, WIDTH, HEIGHT);
+
+        layeredPane.revalidate();
+        layeredPane.repaint();
     }
 
     private void updateMonthLabel() {
@@ -78,23 +100,30 @@ public class CustomCalendarPopup extends JFrame {
     }
 
     private void updateCalendar() {
+
         calendarPanel.removeAll();
         updateMonthLabel();
 
         String[] days = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+
         for (String day : days) {
-            calendarPanel.add(new JLabel(day, SwingConstants.CENTER));
+            JLabel dayLabel = new JLabel(day, SwingConstants.CENTER);
+            dayLabel.setFont(new Font("Monospaced", Font.BOLD, 20));
+            calendarPanel.add(dayLabel);
         }
 
         LocalDate firstDay = currentMonth.atDay(1);
         int start = firstDay.getDayOfWeek().getValue() % 7;
+
         for (int i = 0; i < start; i++) {
             calendarPanel.add(new JLabel(""));
         }
 
         for (int day = 1; day <= currentMonth.lengthOfMonth(); day++) {
+
             final int d = day;
             JLabel label = new JLabel(String.valueOf(day), SwingConstants.CENTER);
+            label.setFont(new Font("Monospaced", Font.BOLD, 20));
             label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
             label.addMouseListener(new MouseAdapter() {
@@ -105,9 +134,8 @@ public class CustomCalendarPopup extends JFrame {
                     if (weather.isThereTemp(selectedDate, 0)) {
                         WeatherApp.getMenu().closePanel();
                         new DisplayWeather(parentFrame, weather, selectedDate);
-                        dispose();
+                        closePopup();
                     }
-
                 }
             });
 
@@ -116,6 +144,12 @@ public class CustomCalendarPopup extends JFrame {
 
         calendarPanel.revalidate();
         calendarPanel.repaint();
+    }
+
+    public void closePopup() {
+        JLayeredPane layeredPane = parentFrame.getLayeredPane();
+        layeredPane.remove(this);
+        layeredPane.repaint();
     }
 
     public LocalDate getSelectedDate() {

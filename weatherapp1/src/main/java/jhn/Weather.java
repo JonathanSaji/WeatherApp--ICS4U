@@ -11,19 +11,30 @@ import org.json.simple.parser.JSONParser;
 public class Weather {
 
     JSONArray time, temperatures;
-    double latitude, longtitude;
+    double latitude, longitude;
     JSONObject dataObject;
 
-    public Weather(double latitude, double longtitude) {
+    public Weather(double latitude, double longitude) {
         this.latitude = latitude;
-        this.longtitude = longtitude;
+        this.longitude = longitude;
         try {
             // Public API
             // https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m&timezone=America%2FNew_York
             // "https://api.open-meteo.com/v1/forecast?latitude=&longitude=-75&hourly=temperature_2m&models=best_match&timezone=America%2FNew_York"
 
-            URL url = new URL("https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longtitude
-                    + "&hourly=temperature_2m&models=best_match&timezone=America%2FNew_York&past_days=92&forecast_days=16");
+            URL url = new URL(
+    "https://api.open-meteo.com/v1/forecast?"
+    + "latitude=" + latitude
+    + "&longitude=" + longitude
+    + "&models=gem_seamless"
+    + "&hourly=temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,"
+    + "precipitation,rain,showers,snowfall,pressure_msl,surface_pressure,cloud_cover,"
+    + "wind_speed_10m,soil_temperature_0_to_10cm,soil_moisture_0_to_10cm,is_day,"
+    + "wind_gusts_10m,wind_direction_10m"
+    + "&timezone=auto"
+    + "&past_days=61"
+    + "&forecast_days=10"
+);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -108,11 +119,11 @@ public class Weather {
         return null; // Not found
     }
 
-    public boolean isThereTemp(LocalDate date,int hour){
+    public boolean isThereTemp(LocalDate date, int hour) {
         String searchTime = String.format("%sT%02d:00", date.toString(), hour);
-        for(int i=0; i < time.size(); i++){
+        for (int i = 0; i < time.size(); i++) {
             String timeStr = (String) time.get(i);
-            if(timeStr.equals(searchTime)){
+            if (timeStr.equals(searchTime)) {
                 return true;
             }
         }
@@ -131,13 +142,5 @@ public class Weather {
         }
 
         return -1; // Not found
-    }
-
-    // NEW METHOD: Get LocalDate from a time slot
-    public LocalDate getDateFromSlot(int slot) {
-        String timeStr = (String) time.get(slot);
-        // Extract date from "2025-12-12T14:00"
-        String dateStr = timeStr.substring(0, 10);
-        return LocalDate.parse(dateStr);
     }
 }

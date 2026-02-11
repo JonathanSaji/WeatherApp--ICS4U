@@ -1,10 +1,5 @@
 package jhn;
 
-import java.io.File;
-import java.io.IOException;
-
-
-import java.awt.*;
 
 public class WeatherApp {
     public static Menu menu;

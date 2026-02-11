@@ -15,12 +15,23 @@ public class Menu extends JFrame implements MouseListener {
     private JLabel settings;
     private Weather weather;
     private JFrame frame;
+    private CustomCalendarPopup popupCalendar;
 
     public Menu(Weather weather) {
 
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setTitle("Menu Example");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setUndecorated(true);
+        this.setResizable(false);
+
+        // Get screen device
+        GraphicsDevice device = GraphicsEnvironment
+                .getLocalGraphicsEnvironment()
+                .getDefaultScreenDevice();
+
+                device.setFullScreenWindow(this);
+
         setFrame(this);
 
 
@@ -43,29 +54,29 @@ public class Menu extends JFrame implements MouseListener {
         // has a layout
         structuredPanel = new JPanel(new GridBagLayout());
         structuredPanel.setBackground(Color.BLACK);
-        structuredPanel.setBounds((1920 - 500) / 2, (1080 - 500) / 2, 500, 500);
+        structuredPanel.setBounds(WeatherApp.getMiddleX(1900), WeatherApp.getMiddleY(1080), 1900, 1080);
 
         panel.add(structuredPanel);
 
         JLabel title = new JLabel();
         labelCreator(title, "Weather App", 500, 100,
-                Color.WHITE, new Font("Monospaced", Font.BOLD, 48), false, 0);
+                Color.WHITE, new Font("Monospaced", Font.BOLD, 48*2), false, 0);
 
         JLabel todayLabel = new JLabel();
         labelCreator(todayLabel, "Today's Weather", 300, 75,
-                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24), true, 1);
+                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24*2), true, 1);
 
         JLabel tommorrowLabel = new JLabel();
         labelCreator(tommorrowLabel, "Tommorrow's Weather", 300, 75,
-                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24), true, 2);
+                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24*2), true, 2);
 
         JLabel PickDateLabel = new JLabel();
         labelCreator(PickDateLabel, "Pick a Date", 300, 75,
-                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24), true, 3);
+                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24*2), true, 3);
 
         JLabel exitLabel = new JLabel();
         labelCreator(exitLabel, "Exit", 300, 75,
-                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24), true, 4);
+                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24*2), true, 4);
 
     }
 
@@ -87,11 +98,17 @@ public class Menu extends JFrame implements MouseListener {
                     // Open Tommorrow's Weather Window
                     structuredPanel.setVisible(false);
                     panel.setVisible(false);
+                    if(popupCalendar != null){
+                        popupCalendar.closePopup();
+                    }
                     new DisplayWeather(this, weather, LocalDate.now().plusDays(1));
                     break;
                 case "Pick a Date":
                     // Open Pick a Date Window
-                    new CustomCalendarPopup(this, weather);
+                    if(popupCalendar != null){
+                        popupCalendar.closePopup();
+                    }
+                    popupCalendar = new CustomCalendarPopup(this, weather,structuredPanel);
                     break;
                 case "Exit":
                     // Exit Application
@@ -101,6 +118,9 @@ public class Menu extends JFrame implements MouseListener {
                 case "Settings":
                     structuredPanel.setVisible(false);
                     panel.setVisible(false);
+                    if(popupCalendar != null){
+                        popupCalendar.closePopup();
+                    }
                     new settings(this);
                     break;
                 default:
@@ -127,7 +147,6 @@ public class Menu extends JFrame implements MouseListener {
         if (e.getComponent() instanceof JLabel) {
             JLabel label = (JLabel) e.getComponent();
             if (label != settings) {
-                label.setOpaque(true);
                 label.setForeground(Color.YELLOW);
             }
         }
@@ -139,7 +158,6 @@ public class Menu extends JFrame implements MouseListener {
         if (e.getComponent() instanceof JLabel) {
             JLabel label = (JLabel) e.getComponent();
             if (label != settings) {
-                label.setOpaque(false);
                 label.setForeground(Color.WHITE);
             }
 
@@ -150,8 +168,8 @@ public class Menu extends JFrame implements MouseListener {
     public void labelCreator(JLabel label, String text, int width, int height, Color textColor, Font font,
             boolean addMouseListener, int row) {
         label = new JLabel(text, SwingConstants.CENTER);
-        label.setPreferredSize(new Dimension(width, height));
-        label.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        label.setPreferredSize(new Dimension(width*5, height*5));
+
         label.setForeground(textColor);
         label.setFont(font);
         label.setBackground(Color.DARK_GRAY);

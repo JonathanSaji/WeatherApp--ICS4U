@@ -8,13 +8,15 @@ import java.awt.*;
 public class DisplayWeather extends JFrame implements MouseListener {
 
     public JPanel todayPanel;
-
+    public LocalDate date;
+    public Weather weather;
     String labelTexts[] = new String[24];
 
     DisplayWeather(JFrame parentFrame, Weather weather,LocalDate date) {
 
         
-
+        this.date = date;
+        this.weather = weather;
         todayPanel = new JPanel(new GridBagLayout());
         todayPanel.setBackground(Color.BLACK);
         todayPanel.setVisible(true);
@@ -66,14 +68,14 @@ public class DisplayWeather extends JFrame implements MouseListener {
         
         if (addMouseListener) {
             label.addMouseListener(this);
+            label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
 
         
-
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = gridx; 
         gbc.gridy = gridy; 
-        gbc.insets = new Insets(10, 10, 10, 10); // Spacing between "cards"
+        gbc.insets = new Insets(10, 0, 0, 10); // Spacing between "cards"
         gbc.fill = GridBagConstraints.BOTH;
 
         todayPanel.add(label, gbc);
@@ -114,8 +116,11 @@ public class DisplayWeather extends JFrame implements MouseListener {
                 case "Menu":
                     todayPanel.setVisible(false);
                     WeatherApp.getMenu().setPanel();
-                default:
-                    break;
+            }
+
+            if(label.getText().contains("AM") || label.getText().contains("PM")){
+                todayPanel.setVisible(false);
+                new DisplayStats(date, weather, WeatherApp.getMenu().getFrame());
             }
         }
 

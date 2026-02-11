@@ -25,7 +25,7 @@ public class settings extends JFrame implements MouseListener{
         0f,false
         1f,true
         */
-
+        
         JButton celciusToFarenheit;
         JLabel celciusOrFarhenheit = new JLabel(); 
         if(celciusFarhenheit){
@@ -48,6 +48,7 @@ public class settings extends JFrame implements MouseListener{
                 WeatherApp.json.setValue("celcius", celciusFarhenheit);
                 
             }
+
             settingsPanel.repaint();
         };
 
@@ -119,7 +120,6 @@ public class settings extends JFrame implements MouseListener{
 
         if (e.getComponent() instanceof JLabel) {
             JLabel label = (JLabel) e.getComponent();
-                label.setOpaque(true);
                 label.setForeground(Color.YELLOW);
         }
 
@@ -130,7 +130,6 @@ public class settings extends JFrame implements MouseListener{
         // Invoked when the mouse exits a component
         if (e.getComponent() instanceof JLabel) {
             JLabel label = (JLabel) e.getComponent();
-                label.setOpaque(false);
                 label.setForeground(Color.WHITE);
 
         }
