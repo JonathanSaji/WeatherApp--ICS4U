@@ -11,6 +11,7 @@ public class DisplayWeather extends JFrame implements MouseListener {
     public LocalDate date;
     public Weather weather;
     String labelTexts[] = new String[24];
+    int hourSelected;
 
     DisplayWeather(JFrame parentFrame, Weather weather,LocalDate date) {
 
@@ -41,8 +42,8 @@ public class DisplayWeather extends JFrame implements MouseListener {
             int offset = (i - 1) * 6; // Cleaner logic for index
             for (int j = 0; j < 6; j++) {
                 int currentIndex = j + offset;
-
-                labelCreator(new JLabel(), labelTexts[currentIndex] + " " + weather.getTemperatureForDateTime(date, currentIndex,WeatherApp.getJsonHandler().getBoolean("celcius") ), true, j, i - 1, 500, 200,currentIndex,true);
+                System.out.println(date);
+                labelCreator(new JLabel(), labelTexts[currentIndex] + " " + weather.getTemperature(date, currentIndex,WeatherApp.getJsonHandler().getBoolean("celcius") ), true, j, i - 1, 500, 200,currentIndex,true);
                     
 
             }
@@ -119,11 +120,18 @@ public class DisplayWeather extends JFrame implements MouseListener {
             }
 
             if(label.getText().contains("AM") || label.getText().contains("PM")){
+                String text = label.getText();
+                int hour = text.substring(0, text.indexOf(' ')).equals("12") ? 0 : Integer.parseInt(text.substring(0, text.indexOf(' ')));
+                if(text.contains("PM")){
+                    hour += 12;
+                }
+                hour = hour == 24 ? 0 : hour;
+                System.out.println(hour);
                 todayPanel.setVisible(false);
-                new DisplayStats(date, weather, WeatherApp.getMenu().getFrame());
+                new DisplayStats(date, weather, WeatherApp.getMenu().getFrame(),hour);
             }
         }
-
+        
 
 
 

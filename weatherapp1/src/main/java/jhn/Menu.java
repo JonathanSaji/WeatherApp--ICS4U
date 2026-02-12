@@ -58,25 +58,26 @@ public class Menu extends JFrame implements MouseListener {
 
         panel.add(structuredPanel);
 
+        int amp = 4;
         JLabel title = new JLabel();
-        labelCreator(title, "Weather App", 500, 100,
-                Color.WHITE, new Font("Monospaced", Font.BOLD, 48*2), false, 0);
+        labelCreator(title, "Weather App", 500 * amp, 100 * amp,
+                Color.WHITE, new Font("Monospaced", Font.BOLD, 48*amp), false, 0);
 
         JLabel todayLabel = new JLabel();
-        labelCreator(todayLabel, "Today's Weather", 300, 75,
-                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24*2), true, 1);
+        labelCreator(todayLabel, "Today's Weather", 300 * amp, 75 * amp,
+                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24* amp), true, 1);
 
         JLabel tommorrowLabel = new JLabel();
-        labelCreator(tommorrowLabel, "Tommorrow's Weather", 300, 75,
-                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24*2), true, 2);
+        labelCreator(tommorrowLabel, "Tommorrow's Weather", 300 * amp, 75 * amp,
+                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24* amp), true, 2);
 
         JLabel PickDateLabel = new JLabel();
-        labelCreator(PickDateLabel, "Pick a Date", 300, 75,
-                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24*2), true, 3);
+        labelCreator(PickDateLabel, "Pick a Date", 300 * amp, 75 * amp,
+                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24* amp), true, 3);
 
         JLabel exitLabel = new JLabel();
-        labelCreator(exitLabel, "Exit", 300, 75,
-                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24*2), true, 4);
+        labelCreator(exitLabel, "Exit", 300 * amp, 75 * amp,
+                Color.WHITE, new Font("Monospaced", Font.PLAIN, 24* amp), true, 4);
 
     }
 
@@ -91,7 +92,9 @@ public class Menu extends JFrame implements MouseListener {
                     // Open Today's Weather Window
                     structuredPanel.setVisible(false);
                     panel.setVisible(false);
-
+                    if(popupCalendar != null){
+                        popupCalendar.closePopup();
+                    }
                     new DisplayWeather(this, weather, LocalDate.now());
                     break;
                 case "Tommorrow's Weather":

@@ -22,7 +22,7 @@ public class AnimationToggle extends JButton {
         setBorderPainted(false);
         setFocusPainted(false);
         setCursor(new Cursor(Cursor.HAND_CURSOR));
-        setPreferredSize(new Dimension(60, 30));
+        setPreferredSize(new Dimension(200, 50));
 
         // Animation Timer (runs at 60 FPS)
         timer = new Timer(10, e -> {

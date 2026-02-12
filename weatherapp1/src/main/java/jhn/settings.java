@@ -4,12 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class settings extends JFrame implements MouseListener{
+public class settings extends JFrame implements MouseListener {
 
     JPanel settingsPanel;
     ActionListener listener;
     boolean celciusFarhenheit = WeatherApp.json.getBoolean("celcius");
-    public settings(JFrame parentFrame){
+
+    public settings(JFrame parentFrame) {
 
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setTitle("Menu Example");
@@ -19,71 +20,68 @@ public class settings extends JFrame implements MouseListener{
         settingsPanel.setBackground(Color.BLACK);
         parentFrame.add(settingsPanel);
 
-
         /*
-        two options
-        0f,false
-        1f,true
-        */
-        
+         * two options
+         * 0f,false
+         * 1f,true
+         */
+
         JButton celciusToFarenheit;
-        JLabel celciusOrFarhenheit = new JLabel(); 
-        if(celciusFarhenheit){
-            celciusToFarenheit = new AnimationToggle(1f,true);
+        JLabel celciusOrFarhenheit = new JLabel();
+        if (celciusFarhenheit) {
+            celciusToFarenheit = new AnimationToggle(1f, true);
             celciusOrFarhenheit.setText("Celcius");
-        }
-        else{
-            celciusToFarenheit = new AnimationToggle(0f,false);
+        } else {
+            celciusToFarenheit = new AnimationToggle(0f, false);
             celciusOrFarhenheit.setText("Fahrenheit");
         }
-
-    
 
         // One ActionListener for all buttons
         listener = e -> {
             Object source = e.getSource();
-            if(source == celciusToFarenheit){
+            if (source == celciusToFarenheit) {
                 celciusFarhenheit = !celciusFarhenheit;
                 celciusOrFarhenheit.setText(celciusFarhenheit ? "Celcius" : "Farhenheit");
                 WeatherApp.json.setValue("celcius", celciusFarhenheit);
-                
+
             }
 
             settingsPanel.repaint();
         };
 
-
-        componentCreator(0,0, celciusToFarenheit,false);
-        componentCreator(4, 0, celciusOrFarhenheit,false);
-        componentCreator(4, 1, new JLabel("Go Back",SwingConstants.CENTER),true);
+        componentCreator(0, 0, celciusToFarenheit, false);
+        componentCreator(4, 0, celciusOrFarhenheit, false);
+        componentCreator(4, 1, new JLabel("Go Back", SwingConstants.CENTER), true);
     }
 
-    public void componentCreator(int gridx,int gridy, Component component,boolean mouseListener){
+    public void componentCreator(int gridx, int gridy, Component component, boolean mouseListener) {
 
-        if(component instanceof JLabel){
-            JLabel label = (JLabel)component;
+        if (component instanceof JLabel) {
+            JLabel label = (JLabel) component;
             label.setForeground(Color.white);
-            label.setFont((new Font("Monospaced", Font.PLAIN, 24)));    
-            if(mouseListener){label.setBackground(Color.DARK_GRAY); ;label.addMouseListener(this);}
-            
-        }
-        else if(component instanceof JButton){
-            ((JButton)component).addActionListener(listener);
+            label.setFont((new Font("Monospaced", Font.PLAIN, 48)));
+            if (mouseListener) {
+                label.setBackground(Color.DARK_GRAY);
+                ;
+                label.addMouseListener(this);
+            }
+
+        } else if (component instanceof JButton) {
+            ((JButton) component).addActionListener(listener);    
+
         }
 
-        
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = gridx; 
-        gbc.gridy = gridy; 
-        gbc.insets = new Insets(100, 0, 0, 100); 
+        gbc.gridx = gridx;
+        gbc.gridy = gridy;
+        gbc.insets = new Insets(100, 0, 0, 100);
         gbc.fill = GridBagConstraints.BOTH;
         settingsPanel.add(component, gbc);
     }
 
     /*
-    Mouse Listener methods
-    */
-
+     * Mouse Listener methods
+     */
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -95,13 +93,13 @@ public class settings extends JFrame implements MouseListener{
                 case "Go Back":
                     settingsPanel.setVisible(false);
                     WeatherApp.getMenu().setPanel();
-                    
+
                     break;
                 default:
-                   
+
+            }
         }
     }
-}
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -120,7 +118,7 @@ public class settings extends JFrame implements MouseListener{
 
         if (e.getComponent() instanceof JLabel) {
             JLabel label = (JLabel) e.getComponent();
-                label.setForeground(Color.YELLOW);
+            label.setForeground(Color.YELLOW);
         }
 
     }
@@ -130,10 +128,9 @@ public class settings extends JFrame implements MouseListener{
         // Invoked when the mouse exits a component
         if (e.getComponent() instanceof JLabel) {
             JLabel label = (JLabel) e.getComponent();
-                label.setForeground(Color.WHITE);
+            label.setForeground(Color.WHITE);
 
         }
     }
 
-    
 }
