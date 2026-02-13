@@ -1,15 +1,15 @@
 package jhn;
 
-
 public class WeatherApp {
     public static Menu menu;
     public static JsonHandler json;
 
     public static void main(String[] args) throws Exception {
 
+        json = new JsonHandler("weatherapp1\\src\\main\\java\\jhn\\settings.json");
+
         menu = new Menu(new Weather(getLat(), getLong()));
         menu.setVisible(true);
-        json = new JsonHandler("weatherapp1\\src\\main\\java\\jhn\\settings.json");
 
     }
 
@@ -30,11 +30,23 @@ public class WeatherApp {
     }
 
     public static double getLat() {
-        return 45.3042;
+        return getJsonHandler().getDouble("latitude");
     }
 
     public static double getLong() {
-        return -75.9341;
+        return getJsonHandler().getDouble("longitude");
+    }
+
+    public static void setLat(double lat) {
+        if(lat > 90) lat = 90;
+        if(lat < -90) lat = -90;
+        json.setValue("latitude", lat);
+    }
+
+    public static void setLong(double lon) {
+        if(lon > 180) lon = 180;
+        if(lon < -180) lon = -180;
+        json.setValue("longitude", lon);
     }
 
     public static Menu getMenu() {

@@ -9,15 +9,23 @@ public class ConfigureStats extends JPanel implements MouseListener {
     ActionListener listener;
     JsonHandler json;
     JFrame parentFrame;
+    JPanel statsPanel;
     boolean showStats[] = new boolean[12];
 
     public ConfigureStats(JFrame parentFrame, JsonHandler json) {
         this.parentFrame = parentFrame;
         this.json = json;
-        setLayout(new GridBagLayout());
-        setBackground(Color.BLACK);
+        setLayout(null);
+        setBackground(Color.WHITE);
         setVisible(true);
         parentFrame.add(this);
+
+        statsPanel = new JPanel(new GridBagLayout());
+        statsPanel.setBackground(Color.BLACK);
+        statsPanel.setVisible(true);
+        statsPanel.setBounds(0, 100, 1920, 980);
+        add(statsPanel);
+
         parentFrame.revalidate();
         parentFrame.repaint();
 
@@ -41,7 +49,13 @@ public class ConfigureStats extends JPanel implements MouseListener {
             System.out.println(statNames[i] + ": " + showStats[i]);
         }
 
-        componentCreator(0, 0, new JLabel("Go Back", SwingConstants.CENTER), true,null);
+        componentCreator(0, 0, new JLabel("Go Back", SwingConstants.CENTER), true, "nol");
+        componentCreator(1, 0, new JLabel("- LAT", SwingConstants.CENTER), true, "nol");
+        componentCreator(2, 0, new JLabel("+ LAT", SwingConstants.CENTER), true, "nol");
+        componentCreator(3, 0, new JLabel("- LONG", SwingConstants.CENTER), true, "nol");
+        componentCreator(4, 0, new JLabel("+ LONG", SwingConstants.CENTER), true, "nol");
+        componentCreator(5, 0, new JLabel("Lat: " + WeatherApp.getLat(), SwingConstants.CENTER), true, "nol");
+        componentCreator(6, 0, new JLabel("Long: " + WeatherApp.getLong(), SwingConstants.CENTER), true, "nol");
 
         // prepare listener before creating buttons so they get it
         listener = e -> {
@@ -58,27 +72,30 @@ public class ConfigureStats extends JPanel implements MouseListener {
             int baseRow = (i / 3) + 1; // 3 stats per row group
             int col = i % 3;
 
-            int buttonRow = baseRow;    // e.g., 2,4,6,...
+            int buttonRow = baseRow; // e.g., 2,4,6,...
 
-            float location = json.getBoolean(statNames[i]) ? 1f : 0f;
-            boolean selected = location == 1f;
+            boolean selected = showStats[i];
+            float location = selected ? 1f : 0f;
 
-            componentCreator(col, buttonRow, new AnimationToggle(location, selected), false,statNames[i]);
+            componentCreator(col, buttonRow, new AnimationToggle(location, selected), false, statNames[i]);
         }
 
-       /// repaint();
     };
 
-    public void componentCreator(int gridx, int gridy, Component component, boolean mouseListener,String key) {
+    public void componentCreator(int gridx, int gridy, Component component, boolean mouseListener, String key) {
 
         if (component instanceof JLabel) {
             JLabel label = (JLabel) component;
-            label.setForeground(Color.WHITE);
-            label.setFont((new Font("Monospaced", Font.BOLD, 48)));
+            label.setFont((new Font("Monospaced", Font.BOLD, 24)));
             if (mouseListener) {
-                label.setBackground(Color.DARK_GRAY);
                 label.addMouseListener(this);
             }
+            if(key.equals("nol")) {
+                label.setBounds(gridx * 250, 0, 200, 100);
+                label.setForeground(Color.BLACK);
+                add(label);
+            }
+
 
         } else if (component instanceof JButton && key != null) {
             JButton button = (JButton) component;
@@ -88,14 +105,19 @@ public class ConfigureStats extends JPanel implements MouseListener {
             button.setForeground(Color.darkGray);
             button.addActionListener(listener);
         }
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = gridx;
-        gbc.gridy = gridy;
-        gbc.insets = new Insets(50, 50, 50, 50);
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 0.0000001; // Adjust as needed for spacing
-        gbc.weighty = 0.0000001; // Adjust as needed for spacing
-        add(component, gbc);
+        if (!key.equals("nol")) {
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = gridx;
+            gbc.gridy = gridy;
+            gbc.insets = new Insets(50, 50, 50, 50);
+            gbc.fill = GridBagConstraints.BOTH;
+            gbc.weightx = 0.0000001; // Adjust as needed for spacing
+            gbc.weighty = 0.0000001; // Adjust as needed for spacing
+            statsPanel.add(component, gbc);
+        }
+
+        repaint();
+        revalidate();
     }
 
     @Override
@@ -118,7 +140,7 @@ public class ConfigureStats extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         if (e.getComponent() instanceof JLabel) {
             JLabel label = (JLabel) e.getComponent();
-                label.setForeground(Color.YELLOW);
+            label.setForeground(Color.RED);
         }
     }
 
@@ -126,14 +148,12 @@ public class ConfigureStats extends JPanel implements MouseListener {
     public void mouseExited(MouseEvent e) {
         if (e.getComponent() instanceof JLabel) {
             JLabel label = (JLabel) e.getComponent();
-                label.setForeground(Color.WHITE);
+            label.setForeground(Color.BLACK);
         }
-
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-
 
     }
 

@@ -11,12 +11,12 @@ import org.json.simple.parser.ParseException;
 public class JsonHandler {
     private String filepath;
     private JSONObject data;
-    
+
     public JsonHandler(String filepath) {
         this.filepath = filepath;
         this.data = loadJson();
     }
-    
+
     // Load existing JSON file
     private JSONObject loadJson() {
         JSONParser parser = new JSONParser();
@@ -30,7 +30,7 @@ public class JsonHandler {
             return new JSONObject();
         }
     }
-    
+
     // Save JSON to file
     private void saveJson() {
         try {
@@ -41,7 +41,7 @@ public class JsonHandler {
             e.printStackTrace();
         }
     }
-    
+
     // Get integer value
     public int getInt(String key) {
         Object value = data.get(key);
@@ -50,35 +50,45 @@ public class JsonHandler {
         }
         return 0;
     }
-    
+
     // Get string value
     public String getString(String key) {
         return (String) data.get(key);
     }
 
-    //gets a boolean value
+    // gets a boolean value
     public boolean getBoolean(String key) {
-    Object value = data.get(key);
-    if (value instanceof Boolean) {
-        return (Boolean) value;
+        Object value = data.get(key);
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
+        return false; // default value
     }
-    return false; // default value
-}
-    
+
+    public double getDouble(String key) {
+        Object value = data.get(key);
+        if (value instanceof Double) {
+            return (Double) value;
+        }
+        return 0.0;
+
+    }
+
     // Set value
     public void setValue(String key, Object value) {
         data.put(key, value);
         saveJson();
     }
-    
+
     // Get entire JSON object
     public JSONObject getData() {
         return data;
     }
+
     public static void main(String[] args) {
         JsonHandler json = new JsonHandler("weatherapp1\\src\\main\\java\\jhn\\settings.json");
         json.setValue("celcius", true);
         System.out.println(json.getBoolean("celcius"));
-        
+
     }
 }
