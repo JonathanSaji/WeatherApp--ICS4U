@@ -11,7 +11,7 @@ public class ConfigureStats extends JPanel implements MouseListener {
     JsonHandler json;
     JFrame parentFrame;
     JPanel statsPanel;
-    JLabel latLabel, longLabel;
+    JLabel latLabel, longLabel, background;
     boolean showStats[] = new boolean[12];
 
     double latBefore = WeatherApp.getLat();
@@ -25,11 +25,17 @@ public class ConfigureStats extends JPanel implements MouseListener {
         setVisible(true);
         parentFrame.add(this);
 
-        statsPanel = new JPanel(new GridBagLayout());
+        statsPanel = new JPanel();
         statsPanel.setBackground(Color.BLACK);
         statsPanel.setVisible(true);
         statsPanel.setBounds(0, 100, 1920, 980);
         add(statsPanel);
+
+        background = new JLabel(new ImageIcon(WeatherApp.getBackgroundHandler().getBackgroundPath()));
+        background.setBounds(0, 0, 1920, 1080);
+        background.setLayout(new GridBagLayout());
+        background.setOpaque(true);
+        statsPanel.add(background);
 
         parentFrame.revalidate();
         parentFrame.repaint();
@@ -113,17 +119,17 @@ public class ConfigureStats extends JPanel implements MouseListener {
             button.setText(key);
             button.setForeground(Color.darkGray);
             button.addActionListener(listener);
-        }
-        if (!key.equals("nol")) {
+
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = gridx;
             gbc.gridy = gridy;
-            gbc.insets = new Insets(50, 50, 50, 50);
+            gbc.insets = new Insets(50, 100, 100, 50);
             gbc.fill = GridBagConstraints.BOTH;
-            gbc.weightx = 0.0000001; // Adjust as needed for spacing
-            gbc.weighty = 0.0000001; // Adjust as needed for spacing
-            statsPanel.add(component, gbc);
+            gbc.weightx = 1;
+            gbc.weighty = 1;
+            background.add(button, gbc);
         }
+
 
         repaint();
         revalidate();
