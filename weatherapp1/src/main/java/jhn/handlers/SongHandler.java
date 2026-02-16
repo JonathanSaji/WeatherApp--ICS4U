@@ -39,7 +39,7 @@ public class SongHandler {
 
     public static void main(String[] args) {
         // Example usage
-        SongHandler songHandler = new SongHandler("weatherapp1/src/main/java/jhn/resources/KCDII.wav");
+        SongHandler songHandler = new SongHandler("weatherapp1\\src\\main\\java\\jhn\\resources\\KCDII.wav");
         songHandler.play();
         try {
             Thread.sleep(100000); // Play for 10 seconds
