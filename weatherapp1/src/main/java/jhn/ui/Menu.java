@@ -70,7 +70,7 @@ public class Menu extends JFrame implements MouseListener {
 
         int amp = 4;
         JLabel title = new JLabel();
-        labelCreator(title, "Weather App", 500 * amp, 100 * amp,
+        labelCreator(title, "Rise'n Shine", 500 * amp, 100 * amp,
                 Color.BLACK, new Font("Monospaced", Font.BOLD, 48*amp), false, 0);
 
         JLabel todayLabel = new JLabel();
