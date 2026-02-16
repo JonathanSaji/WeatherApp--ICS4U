@@ -11,6 +11,7 @@ import java.util.List;
 public class DisplayStats implements MouseListener {
 
     private JPanel statsPanel;
+    private JLabel background;
 
     public DisplayStats(LocalDate date, Weather weather, JFrame parentFrame, int hourSelected) {
 
@@ -18,6 +19,14 @@ public class DisplayStats implements MouseListener {
         statsPanel.setBackground(Color.BLACK);
         statsPanel.setVisible(true);
         parentFrame.add(statsPanel);
+
+        background = new JLabel(new ImageIcon(WeatherApp.getBackgroundHandler().getBackgroundPath()));
+        background.setBounds(0, 0, 1920, 1080);
+        background.setLayout(new GridBagLayout());
+        background.setOpaque(true);
+        statsPanel.add(background);
+
+        
 
         // keys correspond to the JSON keys used for toggling each stat in ConfigureStats
         String keys[] = {
@@ -71,8 +80,8 @@ public class DisplayStats implements MouseListener {
 
         labelCreator(new JLabel(), "Go Back", goBackRow, goBackCol, 500, 200, true);
 
-        statsPanel.revalidate();
-        statsPanel.repaint();
+        background.revalidate();
+        background.repaint();
     }
 
     private String getStatValue(Weather weather, String key, LocalDate date, int hour) {
@@ -110,7 +119,7 @@ public class DisplayStats implements MouseListener {
 
         label = new JLabel(text, SwingConstants.CENTER);
         label.setPreferredSize(new Dimension(width, height));
-        label.setForeground(Color.WHITE);
+        label.setForeground(Color.BLACK);
         label.setFont(new Font("Monospaced", Font.TYPE1_FONT, 38));
         // make labels clickable only when requested
         if (mouseListener) {
@@ -126,7 +135,7 @@ public class DisplayStats implements MouseListener {
         gbc.weighty = 1.0; // distribute extra vertical space evenly
         gbc.anchor = GridBagConstraints.CENTER;
 
-        statsPanel.add(label, gbc);
+        background.add(label, gbc);
 
     }
 
@@ -149,7 +158,7 @@ public class DisplayStats implements MouseListener {
     public void mouseEntered(MouseEvent e) {
         if (e.getComponent() instanceof JLabel) {
             JLabel label = (JLabel) e.getComponent();
-            label.setForeground(Color.YELLOW);
+            label.setForeground(Color.RED);
         }
     }
 
@@ -157,7 +166,7 @@ public class DisplayStats implements MouseListener {
     public void mouseExited(MouseEvent e) {
         if (e.getComponent() instanceof JLabel) {
             JLabel label = (JLabel) e.getComponent();
-            label.setForeground(Color.WHITE);
+            label.setForeground(Color.BLACK);
         }
 
     }
