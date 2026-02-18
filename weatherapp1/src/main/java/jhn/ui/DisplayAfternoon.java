@@ -104,16 +104,15 @@ public class DisplayAfternoon {
 
         // Always shown
         addLabel(panel, createDataLabel(hour), gbc, row++);
-        addLabel(panel, createDataLabel(temp), gbc, row++);
 
         LocalDateTime date = LocalDateTime.now();
         Time time =  new Time(hour,date);
         boolean timeMatch = time.getMatchTime();
-
+        System.out.println(timeMatch);
         if(timeMatch){
             panel.setBorder(BorderFactory.createLineBorder(Color.BLACK,5));
         }
-
+        addLabel(panel, createDataLabel(temp), gbc, row++);
 
         // Toggleable
         if (WeatherApp.json.getBoolean("apparentTemp"))
@@ -149,15 +148,15 @@ public class DisplayAfternoon {
         return label;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Weather App");
+    // public static void main(String[] args) {
+    //     SwingUtilities.invokeLater(() -> {
+    //         JFrame frame = new JFrame("Weather App");
 
-            new DisplayAfternoon(frame, new Weather(45, -75), LocalDate.now());
+    //         new DisplayAfternoon(frame, new Weather(45, -75), LocalDate.now());
 
-            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setVisible(true);
-        });
-    }
+    //         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    //         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    //         frame.setVisible(true);
+    //     });
+    // }
 }

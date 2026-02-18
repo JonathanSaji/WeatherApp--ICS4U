@@ -13,9 +13,12 @@ public class Time {
         if(currentHour == 0){
             currentHour = 12;
         }
+        else if(currentHour > 12){
+            currentHour %= 12;
+        }
         
         compare = currentHour + amOrPm;
-
+        System.out.println(compare);
         if(compare.equals(title)){
             matchTime = true;
         }
@@ -32,7 +35,7 @@ public class Time {
 
     public static void main(String[] args) {
         LocalDateTime date = LocalDateTime.now();
-        System.out.println(new Time("11 PM",date).getMatchTime());;
+        System.out.println(new Time("4 PM",date).getMatchTime());;
 
     }
 }   
