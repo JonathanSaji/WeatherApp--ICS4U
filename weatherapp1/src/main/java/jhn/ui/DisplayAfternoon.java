@@ -5,9 +5,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -16,15 +17,19 @@ import jhn.API.Weather;
 import jhn.handlers.JsonHandler;
 import jhn.run.WeatherApp;
 
-public class DisplayAfternoon {
+public class DisplayAfternoon implements MouseListener{
     Weather weather;
     JPanel background;
     JLabel[] panels = new JLabel[12]; // Array to store 12 hour panels
     JsonHandler json = WeatherApp.json;
+    JPanel timeDividerPanel;
     int count = 0; // Start at 0 not -1
 
-    public DisplayAfternoon(JFrame parentFrame, Weather weather, LocalDate date) {
+    public DisplayAfternoon(JFrame parentFrame, Weather weather, LocalDate date,JPanel timeDividerPanel) {
         this.weather = weather;
+        this.timeDividerPanel = timeDividerPanel;
+
+
         background = new JPanel(new GridBagLayout()) {
             private final ImageIcon icon = new ImageIcon(
                     WeatherApp.backgroundHandler.getBackgroundPath());
@@ -37,18 +42,18 @@ public class DisplayAfternoon {
                 }
             }
         };
-
+        background.addMouseListener(this);
         parentFrame.add(background, BorderLayout.CENTER);
 
         // Create 12 hour panels (2 rows of 6)
-        for (int i = 0; i < 2; i++) {
+
             for (int j = 0; j < 6; j++) {
-                PanelLabelCreator(new JLabel(), j, i, true);
+                PanelLabelCreator(new JLabel(), j, 0, true);
             }
-        }
+        
 
         // Add hour + weather labels inside each panel
-        for (int i = 12; i < 24; i++) {
+        for (int i = 12; i < 18; i++) {
             int hour12 = i % 12;
             if (hour12 == 0)
                 hour12 = 12;
@@ -71,13 +76,7 @@ public class DisplayAfternoon {
     }
 
     public void PanelLabelCreator(JLabel label, int col, int row, boolean isPanel) {
-        if (isPanel) {
-            panels[count++] = label; // Store in array using count
-            label.setOpaque(true);
-            label.setBackground(new Color(176, 196, 222));
-            label.setLayout(new GridBagLayout());
-
-            GridBagConstraints gbc = new GridBagConstraints();
+        GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridx = col;
             gbc.gridy = row;
             gbc.insets = new Insets(50, 10, 10, 50);
@@ -85,8 +84,15 @@ public class DisplayAfternoon {
             gbc.weightx = 1.0;
             gbc.weighty = 1.0;
 
-            background.add(label, gbc);
+        
+        
+        if (isPanel) {
+            panels[count++] = label; // Store in array using count
+            label.setOpaque(true);
+            label.setBackground(new Color(176, 196, 222));
+            label.setLayout(new GridBagLayout());
         }
+        background.add(label, gbc);
     }
 
     // Adds hour, temp and condition labels inside a panel
@@ -146,6 +152,37 @@ public class DisplayAfternoon {
         JLabel label = new JLabel(text, JLabel.CENTER);
         label.setForeground(Color.BLACK);
         return label;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(e.getComponent() instanceof JPanel){
+            JPanel panel = (JPanel)e.getComponent();
+            panel.setVisible(false);
+            timeDividerPanel.setVisible(true);
+        
+            
+        }
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
     }
 
     // public static void main(String[] args) {

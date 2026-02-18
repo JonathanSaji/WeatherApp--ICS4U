@@ -180,13 +180,13 @@ public class TimeDivider extends JFrame implements MouseListener {
                 WeatherApp.getMenu().setPanel();
             } else if (label == morningJLabel) {
                 background.setVisible(false);
-                new DisplayMorning(parentFrame, weather, date);
+                new DisplayMorning(parentFrame, weather, date,background);
             } else if (label == beforenoonJLabel) {
                 background.setVisible(false);
                 // new DisplayBeforeNoon(parentFrame, weather, date);
             } else if (label == afternoonJLabel) {
                 background.setVisible(false);
-                new DisplayAfternoon(parentFrame, weather, date);
+                new DisplayAfternoon(parentFrame, weather, date,background);
             } else if (label == nightJLabel) {
                 background.setVisible(false);
                 // new DisplayNight(parentFrame, weather, date);
@@ -228,6 +228,7 @@ public class TimeDivider extends JFrame implements MouseListener {
     @Override
     public void mouseReleased(MouseEvent e) {
     }
+
 
     // public static void main(String[] args) {
     //     SwingUtilities.invokeLater(() -> {
