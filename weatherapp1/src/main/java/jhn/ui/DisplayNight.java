@@ -17,7 +17,7 @@ import jhn.API.Weather;
 import jhn.handlers.JsonHandler;
 import jhn.run.WeatherApp;
 
-public class DisplayAfternoon implements MouseListener{
+public class DisplayNight implements MouseListener{
     Weather weather;
     JPanel background;
     JLabel[] panels = new JLabel[12]; // Array to store 12 hour panels
@@ -25,7 +25,7 @@ public class DisplayAfternoon implements MouseListener{
     JPanel timeDividerPanel;
     int count = 0; // Start at 0 not -1
 
-    public DisplayAfternoon(JFrame parentFrame, Weather weather, LocalDate date,JPanel timeDividerPanel) {
+    public DisplayNight(JFrame parentFrame, Weather weather, LocalDate date,JPanel timeDividerPanel) {
         this.weather = weather;
         this.timeDividerPanel = timeDividerPanel;
 
@@ -53,7 +53,7 @@ public class DisplayAfternoon implements MouseListener{
         
 
         // Add hour + weather labels inside each panel
-        for (int i = 12; i < 18; i++) {
+        for (int i = 18; i < 24; i++) {
             int hour12 = i % 12;
             if (hour12 == 0)
                 hour12 = 12;
@@ -61,7 +61,7 @@ public class DisplayAfternoon implements MouseListener{
             String hourLabel = hour12 + " " + amPm;
 
             addHourData(
-                    panels[i - 12],
+                    panels[i - 18],
                     hourLabel,
                     weather.getTemperature(date, i, true),
                     weather.getApparentTemp(date, i, true),
@@ -161,7 +161,7 @@ public class DisplayAfternoon implements MouseListener{
             panel.setVisible(false);
             timeDividerPanel.setVisible(true);
         
-
+            
         }
 
     }

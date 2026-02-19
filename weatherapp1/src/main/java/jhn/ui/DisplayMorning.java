@@ -144,7 +144,7 @@ public class DisplayMorning implements MouseListener{
 
     private void addLabel(JLabel panel, JLabel label, GridBagConstraints gbc, int row) {
         gbc.gridy = row;
-        label.setFont(new Font("Monospaced",Font.BOLD,24));
+        label.setFont(new Font("Monospaced",Font.BOLD,25));
         panel.add(label, gbc);
     }
 

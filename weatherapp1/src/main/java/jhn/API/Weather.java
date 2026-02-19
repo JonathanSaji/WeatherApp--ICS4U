@@ -8,6 +8,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import jhn.handlers.JsonHandler;
 import jhn.run.WeatherApp;
 
 public class Weather {
@@ -17,6 +18,7 @@ public class Weather {
             cloudCover, windSpeed, soilTemp, soilMoisture, isDay, windGusts, windDirection;
     double latitude, longitude;
     JSONObject dataObject;
+    JsonHandler json = WeatherApp.getJsonHandler();
 
     public Weather(double latitude, double longitude) {
         this.latitude = latitude;
@@ -30,7 +32,7 @@ public class Weather {
                     "https://api.open-meteo.com/v1/forecast?"
                             + "latitude=" + latitude
                             + "&longitude=" + longitude
-                            + "&models=gem_regional"
+                            + "&models=best_match"
                             + "&hourly=temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,"
                             + "precipitation,rain,showers,snowfall,pressure_msl,surface_pressure,cloud_cover,"
                             + "wind_speed_10m,soil_temperature_0_to_10cm,soil_moisture_0_to_10cm,is_day,"
@@ -143,7 +145,7 @@ public class Weather {
     }
 
     public int getLOWVal(LocalDate date, JSONArray object,int start, int stop) {
-        int lowest = 0;
+        int lowest = Integer.MAX_VALUE;
         for (int i = start; i < stop; i++) {
             String val = getValue(object, date, i);
             if (val == null || val.equals("N/A"))
@@ -164,11 +166,27 @@ public class Weather {
                 }
             }
         }
-        return lowest;
+        if(json.getBoolean("celcius")){
+                if(lowest == Integer.MAX_VALUE){
+                    return 0;
+                } 
+                return lowest;
+            }
+            else{
+                if(lowest == Integer.MAX_VALUE){
+                    return 32;
+                } 
+                return (int) (lowest * 1.8) + 32;
+            }
+    }
+
+    public String getDegreeString(){
+        String degree = WeatherApp.json.getBoolean("celcius") ? "°C" : "°F";
+        return degree;
     }
 
     public int getHIGHVal(LocalDate date, JSONArray object,int start, int stop) {
-        int highest = 0;
+        int highest = Integer.MIN_VALUE;
         for (int i = start; i < stop; i++) {
             String val = getValue(object, date, i);
             if (val == null || val.equals("N/A"))
@@ -189,7 +207,19 @@ public class Weather {
                 }
             }
         }
-        return highest;
+            if(json.getBoolean("celcius")){
+                if(highest == Integer.MIN_VALUE){
+                    return 0;
+                } 
+                return highest;
+            }
+            else{
+                if(highest == Integer.MIN_VALUE){
+                    return 32;
+                } 
+                return (int) (highest * 1.8) + 32;
+            }
+
     }
 
     public String getTemperature(LocalDate date, int hour, boolean celcius) {
@@ -264,7 +294,7 @@ public class Weather {
     }
 
     public String getCloudCover(LocalDate date, int hour) {
-        return "Cloud Cover: " + getValue(cloudCover, date, hour) + " %";
+        return "Cover: " + getValue(cloudCover, date, hour) + " %";
     }
 
     public String getWindSpeed(LocalDate date, int hour) {

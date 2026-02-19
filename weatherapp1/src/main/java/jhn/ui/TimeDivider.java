@@ -54,9 +54,10 @@ public class TimeDivider extends JFrame implements MouseListener {
         timeLabelCreator(nightJLabel, 3);
 
         // --- Morning (00:00 – 06:00) ---
+        String degreeString = weather.getDegreeString();
         statsLabel(new JLabel(), morningJLabel, "Morning", 0, false, null);
         statsLabel(new JLabel(), morningJLabel, "Temp: " + weather.getLOWVal(date, weather.getTemperatures(), 0, 6)
-                + " -> " + weather.getHIGHVal(date, weather.getTemperatures(), 0, 6), 2, false, null);
+                + " -> " + weather.getHIGHVal(date, weather.getTemperatures(), 0, 6) + degreeString, 2, false, null);
         statsLabel(new JLabel(), morningJLabel,
                 "Humidity: " + weather.getAverageVal(date, weather.getHumidity(), 0, 6) + "%", 3, false, null);
         statsLabel(new JLabel(), morningJLabel,
@@ -66,7 +67,7 @@ public class TimeDivider extends JFrame implements MouseListener {
         // --- Before Noon (06:00 – 12:00) ---
         statsLabel(new JLabel(), beforenoonJLabel, "Before Noon", 0, false, null);
         statsLabel(new JLabel(), beforenoonJLabel, "Temp: " + weather.getLOWVal(date, weather.getTemperatures(), 6, 12)
-                + " -> " + weather.getHIGHVal(date, weather.getTemperatures(), 6, 12), 2, false, null);
+                + " -> " + weather.getHIGHVal(date, weather.getTemperatures(), 6, 12) + degreeString, 2, false, null);
         statsLabel(new JLabel(), beforenoonJLabel,
                 "Humidity: " + weather.getAverageVal(date, weather.getHumidity(), 6, 12) + "%", 3, false, null);
         statsLabel(new JLabel(), beforenoonJLabel,
@@ -75,8 +76,8 @@ public class TimeDivider extends JFrame implements MouseListener {
 
         // --- Afternoon (12:00 – 18:00) ---
         statsLabel(new JLabel(), afternoonJLabel, "Afternoon", 0, false, null);
-        statsLabel(new JLabel(), afternoonJLabel, "Temp: " + weather.getLOWVal(date, weather.getTemperatures(), 12, 18)
-                + " -> " + weather.getHIGHVal(date, weather.getTemperatures(), 12, 18), 2, false, null);
+        statsLabel(new JLabel(), afternoonJLabel, "Temp: " + weather.getLOWVal(date, weather.getTemperatures() , 12, 18)
+                + " -> " + weather.getHIGHVal(date, weather.getTemperatures(), 12, 18) + degreeString, 2, false, null);
         statsLabel(new JLabel(), afternoonJLabel,
                 "Humidity: " + weather.getAverageVal(date, weather.getHumidity(), 12, 18) + "%", 3, false, null);
         statsLabel(new JLabel(), afternoonJLabel,
@@ -86,7 +87,7 @@ public class TimeDivider extends JFrame implements MouseListener {
         // --- Night (18:00 – 24:00) ---
         statsLabel(new JLabel(), nightJLabel, "Night", 0, false, null);
         statsLabel(new JLabel(), nightJLabel, "Temp: " + weather.getLOWVal(date, weather.getTemperatures(), 18, 24)
-                + " -> " + weather.getHIGHVal(date, weather.getTemperatures(), 18, 24), 2, false, null);
+                + " -> " + weather.getHIGHVal(date, weather.getTemperatures(), 18, 24) + degreeString, 2, false, null);
         statsLabel(new JLabel(), nightJLabel,
                 "Humidity: " + weather.getAverageVal(date, weather.getHumidity(), 18, 24) + "%", 3, false, null);
         statsLabel(new JLabel(), nightJLabel,
@@ -183,13 +184,13 @@ public class TimeDivider extends JFrame implements MouseListener {
                 new DisplayMorning(parentFrame, weather, date,background);
             } else if (label == beforenoonJLabel) {
                 background.setVisible(false);
-                // new DisplayBeforeNoon(parentFrame, weather, date);
+                new DisplayBeforeNoon(parentFrame, weather, date,background);
             } else if (label == afternoonJLabel) {
                 background.setVisible(false);
                 new DisplayAfternoon(parentFrame, weather, date,background);
             } else if (label == nightJLabel) {
                 background.setVisible(false);
-                // new DisplayNight(parentFrame, weather, date);
+                new DisplayNight(parentFrame, weather, date,background);
             }
         }
     }
@@ -201,7 +202,6 @@ public class TimeDivider extends JFrame implements MouseListener {
             if (label.getText().equals("MENU")) {
                 label.setForeground(Color.RED);
                 label.setBackground(Color.BLACK);
-                label.setOpaque(true);
             } else {
                 label.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
             }
