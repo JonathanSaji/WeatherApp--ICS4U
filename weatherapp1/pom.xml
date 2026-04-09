@@ -33,30 +33,21 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
-    
-    <dependencies>
-      <dependency>
-          <groupId>com.google.code.gson</groupId>
-          <artifactId>gson</artifactId>
-          <version>2.10.1</version>
-      </dependency>
-  </dependencies>
-
-  <dependency>
-      <groupId>com.toedter</groupId>
-      <artifactId>jcalendar</artifactId>
-      <version>1.4</version>
-  </dependency>
-
-
-
-
+    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.10.1</version>
+    </dependency>
+    <dependency>
+        <groupId>com.toedter</groupId>
+        <artifactId>jcalendar</artifactId>
+        <version>1.4</version>
+    </dependency>
     <dependency>
         <groupId>com.googlecode.json-simple</groupId>
         <artifactId>json-simple</artifactId>
         <version>1.1.1</version>
     </dependency>
-    
   </dependencies>
   <build>
     <plugins>

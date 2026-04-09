@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "WeatherApp",
+            "request": "launch",
+            "mainClass": "jhn.run.WeatherApp",
+            "projectName": ""
+        },
+        {
+            "type": "java",
             "name": "Time",
             "request": "launch",
             "mainClass": "jhn.Time",
